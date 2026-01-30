@@ -1,5 +1,5 @@
 from app.core.value_objects.TaskStatus import TaskStatus
-from app.core.exceptions import TaskAlreadyDone
+from app.core.exceptions import *
 
 class Task:
     def __init__(self, task_creator, task_assignee, task_name,  task_description, board_id, now_time,  task_deadline):
@@ -36,6 +36,15 @@ class Task:
 
     def update_description(self, description):
         self.description = description
+
+    def can_edit(self, actor):
+        return self.creator.id != actor.id and self.assignee.id != actor.id
+
+    def is_creator(self, actor):
+        return self.creator.id == actor.id
+
+    def is_assignee(self, actor):
+        return self.assignee.id == actor.id
 
     def __str__(self):
         return (f'task id: {self.id}\n'
