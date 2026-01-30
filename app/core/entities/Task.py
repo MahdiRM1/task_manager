@@ -1,0 +1,49 @@
+from app.core.value_objects.TaskStatus import TaskStatus
+from app.core.exceptions import TaskAlreadyDone
+
+class Task:
+    def __init__(self, task_creator, task_assignee, task_name,  task_description, board_id, now_time,  task_deadline):
+        self.id = None
+        self.creator = task_creator
+        self.assignee = task_assignee
+        self.name = task_name
+        self.description = task_description
+        self.board_id = board_id
+        self.deadline = task_deadline
+        self.create_time = now_time
+        self.status = TaskStatus.TODO
+        self.tags = set()
+
+    def assign_to(self, assignee):
+        self.assignee = assignee
+
+    def add_tag(self, tag):
+        self.tags.add(tag)
+
+    def del_tag(self, tag):
+        self.tags.remove(tag)
+
+    def move_to_board(self, new_board_id):
+        self.board_id = new_board_id
+
+    def done(self):
+        if self.status == TaskStatus.DONE:
+            raise TaskAlreadyDone()
+        self.status = TaskStatus.DONE
+
+    def update_name(self, name):
+        self.name = name
+
+    def update_description(self, description):
+        self.description = description
+
+    def __str__(self):
+        return (f'task id: {self.id}\n'
+                f'name: {self.name}\n'
+                f'create_time: {self.create_time}\n'
+                f'status: {self.status}\n'
+                f'description: {self.description}\n'
+                f'creator: {self.creator}\n'
+                f'assignee: {self.assignee}\n'
+                f'tags: {self.tags}\n'
+                )
