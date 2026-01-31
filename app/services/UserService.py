@@ -23,7 +23,7 @@ class UserService:
 
     def remove_user(self, user_id):
         user = self.loader.get_user(user_id)
-        if not self.task_repo.can_remove(user.id):
+        if not self.task_repo.has_tasks(user.id):
             raise UserCannotRemove(user.id)
         self.user_repo.remove(user)
         msg = f'User {user_id} has been removed'
