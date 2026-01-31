@@ -1,9 +1,9 @@
 class Notification:
-    def __init__(self, receiver, message, time):
+    def __init__(self, receiver, message, creation_time):
         self.id = None
         self.receiver = receiver
         self.message = message
-        self.time = time
+        self.created_at = creation_time
         self.is_read = False
 
     def mark_as_read(self):

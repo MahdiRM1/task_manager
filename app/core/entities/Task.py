@@ -10,7 +10,7 @@ class Task:
         self.description = task_description
         self.board_id = board_id
         self.deadline = task_deadline
-        self.create_time = now_time
+        self.created_at = now_time
         self.status = TaskStatus.TODO
         self.tags = set()
 
@@ -20,7 +20,7 @@ class Task:
     def add_tag(self, tag):
         self.tags.add(tag)
 
-    def del_tag(self, tag):
+    def remove_tag(self, tag):
         self.tags.remove(tag)
 
     def move_to_board(self, new_board_id):
@@ -31,14 +31,14 @@ class Task:
             raise TaskAlreadyDone()
         self.status = TaskStatus.DONE
 
-    def update_name(self, name):
+    def rename(self, name):
         self.name = name
 
     def update_description(self, description):
         self.description = description
 
     def can_edit(self, actor):
-        return self.creator.id != actor.id and self.assignee.id != actor.id
+        return self.creator.id == actor.id or self.assignee.id == actor.id
 
     def is_creator(self, actor):
         return self.creator.id == actor.id
@@ -49,7 +49,7 @@ class Task:
     def __str__(self):
         return (f'task id: {self.id}\n'
                 f'name: {self.name}\n'
-                f'create_time: {self.create_time}\n'
+                f'create_time: {self.created_at}\n'
                 f'status: {self.status}\n'
                 f'description: {self.description}\n'
                 f'creator: {self.creator}\n'
