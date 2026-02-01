@@ -1,7 +1,6 @@
-from sqlalchemy import Column, Integer, String, DateTime, Boolean, ForeignKey
-from sqlalchemy.orm import declarative_base, relationship
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 
-Base = declarative_base()
+from app.adapters.Models.base import Base
 
 class Report(Base):
     __tablename__ = 'reports'
