@@ -12,4 +12,4 @@ class User(Base):
     created_tasks = relationship('Task', back_populates='task_creator')
     assigned_tasks = relationship('Task', back_populates='task_assignee')
     notifs = relationship('Notification', back_populates='receiver')
-    report_target = relationship('Report', back_populates='target_task')
+    report_target = relationship('Report', foreign_keys='Report.target_user_id', back_populates='target_user')

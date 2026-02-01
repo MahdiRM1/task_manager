@@ -21,7 +21,7 @@ class Task:
         self.tag_ids.add(tag.id)
 
     def remove_tag(self, tag):
-        self.tag_ids.remove(tag.Id)
+        self.tag_ids.remove(tag.id)
 
     def move_to_board(self, new_board_id):
         self.board_id = new_board_id

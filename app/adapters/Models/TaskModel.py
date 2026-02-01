@@ -19,5 +19,5 @@ class Task(Base):
     task_creator = relationship('User', foreign_keys=[creator_id], back_populates='created_tasks')
     task_assignee = relationship('User', foreign_keys=[assignee_id], back_populates='assigned_tasks')
     board = relationship('Board', back_populates='tasks')
-    report_target = relationship('Report', back_populates='target_task')
+    report_target = relationship('Report', foreign_keys='Report.target_task_id', back_populates='target_task')
     tags = relationship('Tag', secondary=task_tag, back_populates='tasks')

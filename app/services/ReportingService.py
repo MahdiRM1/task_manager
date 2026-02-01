@@ -27,7 +27,7 @@ class ReportingService:
         self.report_repo.add(report)
 
         msg = f'Report for {target_type} with ID {target_id} was filed by user with ID {creator_id}.'
-        self.notification_service.send(creator, msg)
+        self.notification_service.send_notification(creator, msg)
 
     def remove_report(self, actor_id, report_id):
         actor = get_by_id(self.user_repo, actor_id)
@@ -38,4 +38,4 @@ class ReportingService:
         self.report_repo.remove(report)
 
         msg = f'report with ID {report.id} was removed.'
-        self.notification_service.send(actor, msg)
+        self.notification_service.send_notification(actor, msg)
