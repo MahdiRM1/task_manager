@@ -1,0 +1,15 @@
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import declarative_base, relationship
+
+Base = declarative_base()
+
+class User(Base):
+    __tablename__ = 'users'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+
+    created_tasks = relationship('Task', back_populates='task_creator')
+    assigned_tasks = relationship('Task', back_populates='task_assignee')
+    notifs = relationship('Notification', back_populates='receiver')
+    report_target = relationship('Report', back_populates='target_task')

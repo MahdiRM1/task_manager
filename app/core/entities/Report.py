@@ -1,11 +1,11 @@
 class Report:
-    def __init__(self, creator_id, report_name, report_description, target, now_time):
+    def __init__(self, creator, report_name, report_description, target, target_is_user, now_time):
         self.id = None
-        self.creator_id = creator_id
+        self.creator_id = creator.id
         self.name = report_name
         self.description = report_description
-        self.target_id = target.id
-        self.target_type = target.__class__.__name__
+        self.target_user_id = target.id if target_is_user else None
+        self.target_task_id = None if target.id else target.id
         self.created_at = now_time
 
     def __str__(self):

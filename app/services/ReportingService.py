@@ -17,12 +17,13 @@ class ReportingService:
 
         if target_type == 'Task':
             target = get_by_id(self.task_repo, target_id)
+            report = Report(creator, name, description, target, False, datetime.now())
         elif target_type == 'User':
             target = get_by_id(self.user_repo, target_id)
+            report = Report(creator, name, description, target, True, datetime.now())
         else:
             raise InvalidTargetType(target_type)
 
-        report = Report(creator, name, description, target, datetime.now())
         self.report_repo.add(report)
 
         msg = f'Report for {target_type} with ID {target_id} was filed by user with ID {creator_id}.'
