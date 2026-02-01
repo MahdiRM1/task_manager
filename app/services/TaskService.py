@@ -2,19 +2,21 @@ from datetime import datetime
 
 from app.core.entities.Tag import Tag
 from app.core.entities.Task import Task
-from app.services.exceptions import *
+from app.services.Helper import *
+
 
 class TaskService:
-    def __init__(self, task_repo, tag_repo, notification_services, loader):
+    def __init__(self, task_repo, user_repo, board_repo, tag_repo, notification_services):
         self.task_repo = task_repo
+        self.user_repo = user_repo
+        self.board_repo = board_repo
         self.tag_repo = tag_repo
         self.notification_services = notification_services
-        self.loader = loader
 
     def add_task(self, creator_id, assignee_id, name, description,  board_id, deadline):
-        creator = self.loader.get_user(creator_id)
-        assignee = self.loader.get_user(assignee_id)
-        board = self.loader.get_board(board_id)
+        creator = get_by_id(self.user_repo, creator_id)
+        assignee = get_by_id(self.user_repo, assignee_id)
+        board = get_by_id(self.board_repo, board_id)
 
         now = datetime.now()
         if deadline <= now:
@@ -31,8 +33,8 @@ class TaskService:
             self.notification_services.send_notification(assignee, msg)
 
     def remove_task(self, actor_id, task_id):
-        actor = self.loader.get_user(actor_id)
-        task = self.loader.get_task(task_id)
+        actor = get_by_id(self.user_repo, actor_id)
+        task = get_by_id(self.task_repo, task_id)
 
         if not task.is_creator(actor):
             raise PermissionDenied()
@@ -43,8 +45,8 @@ class TaskService:
         self._notify_both(task, msg)
 
     def task_done(self, actor_id, task_id):
-        actor = self.loader.get_user(actor_id)
-        task = self.loader.get_task(task_id)
+        actor = get_by_id(self.user_repo, actor_id)
+        task = get_by_id(self.task_repo, task_id)
 
         if not task.is_assignee(actor):
             raise PermissionDenied()
@@ -56,9 +58,9 @@ class TaskService:
         self._notify_both(task, msg)
 
     def assign_task(self, actor_id, assignee_id, task_id):
-        actor = self.loader.get_user(actor_id)
-        task = self.loader.get_task(task_id)
-        assignee = self.loader.get_user(assignee_id)
+        actor = get_by_id(self.user_repo, actor_id)
+        task = get_by_id(self.task_repo, task_id)
+        assignee = get_by_id(self.user_repo, assignee_id)
 
         if not task.is_creator(actor):
             raise PermissionDenied()
@@ -76,9 +78,9 @@ class TaskService:
             self.notification_services.send_notification(old_assignee, msg)
 
     def move_task(self, actor_id, board_id, task_id):
-        actor = self.loader.get_user(actor_id)
-        task = self.loader.get_task(task_id)
-        board = self.loader.get_board(board_id)
+        actor = get_by_id(self.user_repo, actor_id)
+        task = get_by_id(self.task_repo, task_id)
+        board = get_by_id(self.board_repo, board_id)
 
         if task.board_id == board.id:
             raise TaskAlreadyOnBoard(task.id, board.id)
@@ -94,8 +96,8 @@ class TaskService:
         self._notify_both(task, msg)
 
     def add_tag_to_task(self, actor_id, tag_name, task_id):
-        actor = self.loader.get_user(actor_id)
-        task = self.loader.get_task(task_id)
+        actor = get_by_id(self.user_repo, actor_id)
+        task = get_by_id(self.task_repo, task_id)
 
         if not task.can_edit(actor):
             raise PermissionDenied()
@@ -109,22 +111,20 @@ class TaskService:
         self.task_repo.update(task)
 
     def remove_tag_task(self, actor_id, tag_name, task_id):
-        actor = self.loader.get_user(actor_id)
-        task = self.loader.get_task(task_id)
+        actor = get_by_id(self.user_repo, actor_id)
+        task = get_by_id(self.task_repo, task_id)
 
         if not task.can_edit(actor):
             raise PermissionDenied()
 
-        tag = self.tag_repo.get_by_name(tag_name)
-        if tag is None:
-            raise TagNameNotFound(tag_name)
+        tag = get_by_name(self.tag_repo, tag_name)
 
         task.remove_tag(tag)
         self.task_repo.update(task)
 
     def rename_task(self, actor_id, name, task_id):
-        actor = self.loader.get_user(actor_id)
-        task = self.loader.get_task(task_id)
+        actor = get_by_id(self.user_repo, actor_id)
+        task = get_by_id(self.task_repo, task_id)
 
         if not task.can_edit(actor):
             raise PermissionDenied()
@@ -138,8 +138,8 @@ class TaskService:
         self._notify_both(task, msg)
 
     def update_description(self, actor_id, description, task_id):
-        actor = self.loader.get_user(actor_id)
-        task = self.loader.get_task(task_id)
+        actor = get_by_id(self.user_repo, actor_id)
+        task = get_by_id(self.task_repo, task_id)
 
         if not task.can_edit(actor):
             raise PermissionDenied()

@@ -1,22 +1,24 @@
 from datetime import datetime
 
 from app.core.entities.Report import Report
-from app.services.exceptions import PermissionDenied, InvalidTargetType
+from app.services.Exceptions import PermissionDenied, InvalidTargetType
+from app.services.Helper import get_by_id
 
 
 class ReportingService:
-    def __init__(self, report_repo, notification_service, loader):
+    def __init__(self, task_repo, user_repo, report_repo, notification_service):
+        self.task_repo = task_repo
+        self.user_repo = user_repo
         self.report_repo = report_repo
         self.notification_service = notification_service
-        self.loader = loader
 
     def create_report(self, creator_id, name, description, target_id, target_type):
-        creator = self.loader.get_user(creator_id)
+        creator = get_by_id(self.user_repo, creator_id)
 
         if target_type == 'Task':
-            target = self.loader.get_task(target_id)
+            target = get_by_id(self.task_repo, target_id)
         elif target_type == 'User':
-            target = self.loader.get_user(target_id)
+            target = get_by_id(self.user_repo, target_id)
         else:
             raise InvalidTargetType(target_type)
 
@@ -27,8 +29,8 @@ class ReportingService:
         self.notification_service.send(creator, msg)
 
     def remove_report(self, actor_id, report_id):
-        actor = self.loader.get_user(actor_id)
-        report = self.loader.get_report(report_id)
+        actor = get_by_id(self.user_repo, actor_id)
+        report = get_by_id(self.report_repo, report_id)
 
         if actor.id != report.creator.id:
             raise PermissionDenied()

@@ -1,26 +1,10 @@
-class UserIdNotFound(Exception):
-    def __init__(self, user_id):
-        super().__init__(f'User id "{user_id}" not found.')
+class IdNotFound(Exception):
+    def __init__(self, entity_type, entity_id):
+        super().__init__(f'"{entity_type} id "{entity_id}" not found.')
 
-class BoardIdNotFound(Exception):
-    def __init__(self, board_id):
-        super().__init__(f'Board id "{board_id}" not found.')
-
-class TaskIdNotFound(Exception):
-    def __init__(self, task_id):
-        super().__init__(f'Task id "{task_id}" not found.')
-
-class NotificationIdNotFound(Exception):
-    def __init__(self, notification_id):
-        super().__init__(f'Notification id "{notification_id}" not found.')
-
-class ReportIdNotFound(Exception):
-    def __init__(self, report_id):
-        super().__init__(f'Report id "{report_id}" not found.')
-
-class TagNameNotFound(Exception):
-    def __init__(self, tag_id):
-        super().__init__(f'Tag id "{tag_id}" not found.')
+class NameNotFound(Exception):
+    def __init__(self, entity_type, entity_name):
+        super().__init__(f'{entity_type} id "{id}" not found.')
 
 class InvalidTaskDeadline(Exception):
     def __init__(self, task_id):

@@ -2,10 +2,10 @@ from app.core.value_objects.TaskStatus import TaskStatus
 from app.core.exceptions import *
 
 class Task:
-    def __init__(self, task_creator, task_assignee, task_name,  task_description, board_id, now_time,  task_deadline):
+    def __init__(self, task_creator_id, task_assignee_id, task_name,  task_description, board_id, now_time,  task_deadline):
         self.id = None
-        self.creator = task_creator
-        self.assignee = task_assignee
+        self.creator_id = task_creator_id
+        self.assignee_id = task_assignee_id
         self.name = task_name
         self.description = task_description
         self.board_id = board_id
