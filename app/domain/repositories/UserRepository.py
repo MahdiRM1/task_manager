@@ -17,5 +17,9 @@ class UserRepository(ABC):
         pass
 
     @abstractmethod
-    def get_by_id(self, user_id: int) -> User:
+    def get_by_id(self, user_id: int) -> User | None:
+        pass
+
+    @abstractmethod
+    def has_tasks(self, user_id: int) -> bool:
         pass

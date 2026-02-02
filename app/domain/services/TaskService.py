@@ -2,6 +2,7 @@ from datetime import datetime
 
 from app.core.entities.Tag import Tag
 from app.core.entities.Task import Task
+from app.domain.Exceptions import *
 from app.domain.Helper import *
 
 
@@ -22,7 +23,7 @@ class TaskService:
         if deadline <= now:
             raise InvalidTaskDeadline(deadline)
 
-        task = Task(creator, assignee, name, description, board, now, deadline)
+        task = Task(creator_id, assignee_id, name, description, board_id, now, deadline)
         self.task_repo.add(task)
 
         msg = (f'Task {task.name} with ID {task.id} was added.\n'

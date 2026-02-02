@@ -2,17 +2,17 @@ from app.core.value_objects.TaskStatus import TaskStatus
 from app.core.exceptions import *
 
 class Task:
-    def __init__(self, task_creator, task_assignee, task_name,  task_description, board, now_time,  task_deadline):
+    def __init__(self, task_creator_id, task_assignee_id, task_name,  task_description, board_id, now_time,  task_deadline, status='TODO', tags = None):
         self.id = None
-        self.creator_id = task_creator.id
-        self.assignee_id = task_assignee.id
+        self.creator_id = task_creator_id
+        self.assignee_id = task_assignee_id
         self.name = task_name
         self.description = task_description
-        self.board_id = board.id
+        self.board_id = board_id
         self.created_at = now_time
         self.deadline = task_deadline
-        self.status = TaskStatus.TODO
-        self.tag_ids = set()
+        self.status = TaskStatus.TODO if status == 'TODO' else TaskStatus.DONE
+        self.tag_ids = set(tags)
 
     def assign_to(self, assignee):
         self.assignee_id = assignee.id

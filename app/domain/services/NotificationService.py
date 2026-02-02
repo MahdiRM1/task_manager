@@ -10,7 +10,7 @@ class NotificationService:
         self.notification_repo = notification_repo
 
     def send_notification(self, receiver, msg):
-        notification = Notification(receiver, msg, datetime.now())
+        notification = Notification(receiver.id, msg, datetime.now())
         self.notification_repo.add(notification)
 
     def mark_as_read(self, actor_id, notification_id):

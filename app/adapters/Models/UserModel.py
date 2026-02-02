@@ -3,13 +3,14 @@ from sqlalchemy.orm import relationship
 
 from app.adapters.Models.base import Base
 
-class User(Base):
+class UserModel(Base):
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
 
-    created_tasks = relationship('Task', back_populates='task_creator')
-    assigned_tasks = relationship('Task', back_populates='task_assignee')
-    notifs = relationship('Notification', back_populates='receiver')
-    report_target = relationship('Report', foreign_keys='Report.target_user_id', back_populates='target_user')
+    created_tasks = relationship('TaskModel', back_populates='task_creator')
+    assigned_tasks = relationship('TaskModel', back_populates='task_assignee')
+    notifs = relationship('NotificationModel', back_populates='receiver')
+    created_reports = relationship('ReportModel', back_populates='creator')
+    report_target = relationship('ReportModel', foreign_keys='ReportModel.target_user_id', back_populates='target_user')

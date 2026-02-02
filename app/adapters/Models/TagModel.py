@@ -4,10 +4,10 @@ from sqlalchemy.orm import relationship
 from app.adapters.Models.Associations import task_tag
 from app.adapters.Models.base import Base
 
-class Tag(Base):
+class TagModel(Base):
     __tablename__ = 'tags'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    name = Column(String, unique=True)
 
-    tasks = relationship('Task', secondary=task_tag, back_populates='tags')
+    tasks = relationship('TaskModel', secondary=task_tag, back_populates='tags')

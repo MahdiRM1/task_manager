@@ -16,11 +16,9 @@ class ReportingService:
         creator = get_by_id(self.user_repo, creator_id)
 
         if target_type == 'Task':
-            target = get_by_id(self.task_repo, target_id)
-            report = Report(creator, name, description, target, False, datetime.now())
+            report = Report(creator_id, name, description, None, target_id, datetime.now())
         elif target_type == 'User':
-            target = get_by_id(self.user_repo, target_id)
-            report = Report(creator, name, description, target, True, datetime.now())
+            report = Report(creator_id, name, description, target_id, None, datetime.now())
         else:
             raise InvalidTargetType(target_type)
 

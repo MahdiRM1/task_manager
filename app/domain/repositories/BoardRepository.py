@@ -14,5 +14,5 @@ class BoardRepository(ABC):
         pass
 
     @abstractmethod
-    def get_by_id(self, board_id:int) -> Board:
+    def get_by_id(self, board_id:int) -> Board | None:
         pass

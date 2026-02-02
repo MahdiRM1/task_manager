@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 
 from app.adapters.Models.base import Base
 
-class Notification(Base):
+class NotificationModel(Base):
     __tablename__ = 'notifications'
 
     id = Column(Integer, primary_key=True)
@@ -12,4 +12,4 @@ class Notification(Base):
     created_at = Column(DateTime)
     is_read = Column(Boolean)
 
-    receiver = relationship('User', back_populates='notifs')
+    receiver = relationship('UserModel', back_populates='notifs')

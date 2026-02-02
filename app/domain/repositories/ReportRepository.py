@@ -14,5 +14,5 @@ class ReportRepository(ABC):
         pass
 
     @abstractmethod
-    def get_by_id(self, report_id: int) -> Report:
+    def get_by_id(self, report_id: int) -> Report | None:
         pass

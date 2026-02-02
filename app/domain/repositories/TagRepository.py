@@ -14,5 +14,5 @@ class TagRepository(ABC):
         pass
 
     @abstractmethod
-    def get_by_name(self, tag_name:str) -> Tag:
+    def get_by_name(self, tag_name:str) -> Tag | None:
         pass

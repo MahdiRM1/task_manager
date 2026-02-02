@@ -4,8 +4,7 @@ from app.domain.Helper import get_by_id
 
 
 class UserService:
-    def __init__(self, task_repo, user_repo, notification_services):
-        self.task_repo = task_repo
+    def __init__(self, user_repo, notification_services):
         self.user_repo = user_repo
         self.notification_services = notification_services
 
@@ -23,7 +22,7 @@ class UserService:
 
     def remove_user(self, user_id):
         user = get_by_id(self.user_repo, user_id)
-        if not self.task_repo.has_tasks(user.id):
+        if not self.user_repo.has_tasks(user.id):
             raise UserCannotRemove(user.id)
         self.user_repo.remove(user)
         msg = f'User {user_id} has been removed'
