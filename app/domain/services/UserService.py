@@ -1,6 +1,6 @@
 from app.core.entities.User import User
-from app.services.Exceptions import UserCannotRemove
-from app.services.Helper import get_by_id
+from app.domain.Exceptions import UserCannotRemove
+from app.domain.Helper import get_by_id
 
 
 class UserService:

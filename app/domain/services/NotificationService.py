@@ -1,8 +1,8 @@
 from datetime import datetime
 
 from app.core.entities.Notification import Notification
-from app.services.Exceptions import PermissionDenied
-from app.services.Helper import get_by_id
+from app.domain.Exceptions import PermissionDenied
+from app.domain.Helper import get_by_id
 
 
 class NotificationService:

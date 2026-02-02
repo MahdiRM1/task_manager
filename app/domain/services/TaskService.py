@@ -2,7 +2,7 @@ from datetime import datetime
 
 from app.core.entities.Tag import Tag
 from app.core.entities.Task import Task
-from app.services.Helper import *
+from app.domain.Helper import *
 
 
 class TaskService:

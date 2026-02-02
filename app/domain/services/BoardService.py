@@ -1,5 +1,5 @@
 from app.core.entities.Board import Board
-from app.services.Helper import get_by_id
+from app.domain.Helper import get_by_id
 
 class BoardService:
     def __init__(self, board_repo):

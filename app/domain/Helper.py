@@ -1,5 +1,3 @@
-from app.services.Exceptions import *
-
 def get_by_id(repo, entity_id):
     entity = repo.get_by_id(entity_id)
     if entity is None:

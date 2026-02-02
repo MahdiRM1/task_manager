@@ -1,8 +1,8 @@
 from datetime import datetime
 
 from app.core.entities.Report import Report
-from app.services.Exceptions import PermissionDenied, InvalidTargetType
-from app.services.Helper import get_by_id
+from app.domain.Exceptions import PermissionDenied, InvalidTargetType
+from app.domain.Helper import get_by_id
 
 
 class ReportingService:
