@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 
-from app.adapters.Models.NotificationModel import NotificationModel
+from app.adapters.Exceptions import IdNotFound
+from app.adapters.mappers.NotificationMapper import NotificationMapper
+from app.adapters.models.NotificationModel import NotificationModel
 from app.core.entities.Notification import Notification
 from app.domain.repositories.NotificationRepository import NotificationRepository
 
@@ -11,40 +13,29 @@ class SqlNotificationRepository(NotificationRepository):
 
 
     def add(self, notification: Notification) -> None:
-        notification_model = NotificationModel(
-            message = notification.message,
-            created_at = notification.created_at,
-            is_read = notification.is_read
-        )
-        self.session.add(notification_model)
+        model = NotificationMapper.to_model(notification)
+        self.session.add(model)
         self.session.flush()
         self.session.commit()
-        notification.id = notification_model.id
+        notification._set_id(model.id)
 
     def remove(self, notification: Notification) -> None:
-        notification_model = self.session.get(NotificationModel, notification.id)
-        if notification_model:
-            self.session.delete(notification_model)
+        model = self.session.get(NotificationModel, notification.id)
+        if model:
+            self.session.delete(model)
             self.session.commit()
 
     def update(self, notification: Notification) -> None:
-        notification_model = self.session.get(NotificationModel, notification.id)
-        if notification_model:
-            notification_model.message = notification.message
-            notification_model.is_read = notification.is_read
+        model = self.session.get(NotificationModel, notification.id)
+        if model:
+            NotificationMapper.update_model(model, notification)
             self.session.commit()
 
-    def get_by_id(self, notification_id : int) -> Notification | None:
-        notification_model = self.session.get(NotificationModel, notification_id)
+    def get_by_id(self, notification_id : int) ->  Notification:
+        model = self.session.get(NotificationModel, notification_id)
 
-        if not notification_model:
-            return None
+        if not model:
+            raise IdNotFound(f'Notification id {notification_id} not found.')
 
-        notification = Notification(
-            notification_model.receiver_id,
-            notification_model.message,
-            notification_model.created_at,
-            notification_model.is_read
-        )
-        notification.id = notification_model.id
+        notification = NotificationMapper.to_entity(model)
         return notification

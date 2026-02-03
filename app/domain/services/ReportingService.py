@@ -2,7 +2,6 @@ from datetime import datetime
 
 from app.core.entities.Report import Report
 from app.domain.Exceptions import PermissionDenied, InvalidTargetType
-from app.domain.Helper import get_by_id
 
 
 class ReportingService:
@@ -13,7 +12,7 @@ class ReportingService:
         self.notification_service = notification_service
 
     def create_report(self, creator_id, name, description, target_id, target_type):
-        creator = get_by_id(self.user_repo, creator_id)
+        creator = self.report_repo.get_by_id(creator_id)
 
         if target_type == 'Task':
             report = Report(creator_id, name, description, None, target_id, datetime.now())
@@ -25,15 +24,14 @@ class ReportingService:
         self.report_repo.add(report)
 
         msg = f'Report for {target_type} with ID {target_id} was filed by user with ID {creator_id}.'
-        self.notification_service.send_notification(creator, msg)
+        self.notification_service.send_notification(creator.id, msg)
 
     def remove_report(self, actor_id, report_id):
-        actor = get_by_id(self.user_repo, actor_id)
-        report = get_by_id(self.report_repo, report_id)
+        report = self.report_repo.get_by_id(report_id)
 
-        if actor.id != report.creator.id:
+        if actor_id != report.creator.id:
             raise PermissionDenied()
         self.report_repo.remove(report)
 
         msg = f'report with ID {report.id} was removed.'
-        self.notification_service.send_notification(actor, msg)
+        self.notification_service.send_notification(actor_id, msg)

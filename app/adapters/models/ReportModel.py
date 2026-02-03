@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 
-from app.adapters.Models.base import Base
+from app.adapters.models.base import Base
 
 class ReportModel(Base):
     __tablename__ = 'reports'

@@ -1,6 +1,5 @@
 from app.core.entities.User import User
 from app.domain.Exceptions import UserCannotRemove
-from app.domain.Helper import get_by_id
 
 
 class UserService:
@@ -13,17 +12,17 @@ class UserService:
         self.user_repo.add(user)
 
     def rename_user(self, user_id, new_name):
-        user = get_by_id(self.user_repo, user_id)
+        user = self.user_repo.get_by_id(user_id)
         old_name = user.name
         user.rename(new_name)
         self.user_repo.update(user)
         msg = f'User {old_name} with id {user.id} has been renamed to {new_name}'
-        self.notification_services.send_notification(user, msg)
+        self.notification_services.send_notification(user.id, msg)
 
     def remove_user(self, user_id):
-        user = get_by_id(self.user_repo, user_id)
+        user = self.user_repo.get_by_id(user_id)
         if not self.user_repo.has_tasks(user.id):
             raise UserCannotRemove(user.id)
         self.user_repo.remove(user)
         msg = f'User {user_id} has been removed'
-        self.notification_services.send_notification(user, msg)
+        self.notification_services.send_notification(user.id, msg)

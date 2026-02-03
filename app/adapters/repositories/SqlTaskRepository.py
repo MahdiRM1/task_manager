@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 
-from app.adapters.Models.TaskModel import TaskModel
+from app.adapters.Exceptions import IdNotFound
+from app.adapters.mappers.TaskMapper import TaskMapper
+from app.adapters.models.TaskModel import TaskModel
 from app.core.entities.Task import Task
 from app.domain.repositories.TaskRepository import TaskRepository
 
@@ -10,59 +12,30 @@ class SqlTaskRepository(TaskRepository):
         self.session = session
 
     def add(self, task:Task) -> None:
-        task_model = TaskModel(
-            creator_id=task.creator_id,
-            assignee_id=task.assignee_id,
-            name=task.name,
-            description=task.description,
-            board_id=task.board_id,
-            deadline=task.deadline,
-            created_at=task.created_at,
-            status=task.status
-        )
-        self.session.add(task_model)
+        model = TaskMapper.to_model(task)
+        self.session.add(model)
         self.session.flush()
         self.session.commit()
-        task.id = task_model.id
+        task._set_id(model.id)
 
     def remove(self, task:Task) -> None:
-        task_model = self.session.get(TaskModel, task.id)
-        if task_model:
-            self.session.delete(task_model)
+        model = self.session.get(TaskModel, task.get_id())
+        if model:
+            self.session.delete(model)
             self.session.commit()
 
     def update(self, task:Task) -> None:
-        task_model = self.session.get(TaskModel, task.id)
+        model = self.session.get(TaskModel, task.get_id())
 
-        if task_model:
-            task_model.assignee_id = task.assignee_id
-            task_model.name = task.name
-            task_model.description = task.description
-            task_model.board_id = task.board_id
-            task_model.deadline = task.deadline
-            task_model.status=task.status
+        if model:
+            TaskMapper.update_model(model, task)
             self.session.commit()
 
-    def get_by_id(self, task_id:int) -> Task | None:
-        task_model = self.session.get(TaskModel, task_id)
+    def get_by_id(self, task_id: int) -> Task:
+        model = self.session.get(TaskModel, task_id)
 
-        if not task_model:
-            return None
+        if not model:
+            raise IdNotFound(f'Task with id {task_id} not found')
 
-        tag_ids = []
-        for tag in task_model.tags:
-            tag_ids.append(tag.id)
-
-        task = Task(
-            task_model.creator_id,
-            task_model.assignee_id,
-            task_model.name,
-            task_model.description,
-            task_model.board_id,
-            task_model.created_at,
-            task_model.deadline,
-            task_model.status.name,
-            tags=tag_ids
-        )
-        task.id = task_model.id
+        task = TaskMapper.to_entity(model)
         return task

@@ -1,6 +1,6 @@
 from sqlalchemy import Table, Column, Integer, ForeignKey
 
-from app.adapters.Models.base import Base
+from app.adapters.models.base import Base
 
 task_tag = Table(
     'task_tag',

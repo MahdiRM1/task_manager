@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 
-from app.adapters.Models.Associations import task_tag
-from app.adapters.Models.base import Base
+from app.adapters.models.Associations import task_tag
+from app.adapters.models.base import Base
 
 class TagModel(Base):
     __tablename__ = 'tags'

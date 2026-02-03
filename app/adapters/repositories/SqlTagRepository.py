@@ -1,4 +1,5 @@
-from app.adapters.Models.TagModel import TagModel
+from app.adapters.Exceptions import NameNotFound
+from app.adapters.models.TagModel import TagModel
 from app.core.entities.Tag import Tag
 from app.domain.repositories.TagRepository import TagRepository
 
@@ -8,26 +9,25 @@ class SqlTagRepository(TagRepository):
         self.session = session
 
     def add(self, tag: Tag) -> None:
-        tag_model = self.session.query(TagModel).filter_by(name=tag.name).first()
-        if not tag_model:
-            tag_model = TagModel(name=tag.name)
-            self.session.add(tag_model)
+        model = self.session.query(TagModel).filter_by(name=tag.name).first()
+        if not model:
+            model = TagModel(name=tag.name)
+            self.session.add(model)
             self.session.flush()
             self.session.commit()
-            tag.id = tag_model.id
+            tag._set_id(model.id)
 
     def remove(self, tag: Tag) -> None:
-        tag_model = self.session.get(TagModel, tag.id)
-        if tag_model:
-            self.session.delete(tag_model)
+        model = self.session.get(TagModel, tag.id)
+        if model:
+            self.session.delete(model)
             self.session.commit()
 
-    def get_by_name(self, tag_name:str) -> Tag | None:
-        tag_model = self.session.query(TagModel).filter_by(name=tag_name).first()
+    def get_by_name(self, tag_name:str) -> Tag:
+        model = self.session.query(TagModel).filter_by(name=tag_name).first()
 
-        if not tag_model:
-            return None
+        if not model:
+            raise NameNotFound(f'tag name {tag_name} not found.')
 
-        tag = Tag(tag_model.name)
-        tag.id = tag_model.id
+        tag = Tag(model.name, model.id)
         return tag

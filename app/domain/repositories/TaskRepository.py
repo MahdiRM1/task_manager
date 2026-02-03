@@ -18,5 +18,5 @@ class TaskRepository(ABC):
         pass
 
     @abstractmethod
-    def get_by_id(self, task_id:int) -> Task | None:
+    def get_by_id(self, task_id:int) -> Task:
         pass

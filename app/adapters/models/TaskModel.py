@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
-from app.adapters.Models.Associations import task_tag
-from app.adapters.Models.base import Base
+from app.adapters.models.Associations import task_tag
+from app.adapters.models.base import Base
 
 class TaskModel(Base):
     __tablename__ = 'tasks'

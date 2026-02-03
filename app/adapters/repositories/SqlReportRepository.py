@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 
-from app.adapters.Models.ReportModel import ReportModel
+from app.adapters.Exceptions import IdNotFound
+from app.adapters.mappers.ReportMapper import ReportMapper
+from app.adapters.models.ReportModel import ReportModel
 from app.core.entities.Report import Report
 from app.domain.repositories.ReportRepository import ReportRepository
 
@@ -10,38 +12,23 @@ class SqlReportRepository(ReportRepository):
         self.session = session
 
     def add(self, report: Report) -> None:
-        report_model = ReportModel(
-            creator_id=report.creator_id,
-            name=report.name,
-            description=report.description,
-            target_user_id=report.target_user_id,
-            target_task_id=report.target_task_id,
-            created_at=report.created_at
-        )
-        self.session.add(report_model)
+        model = ReportMapper.to_model(report)
+        self.session.add(model)
         self.session.flush()
         self.session.commit()
-        report.id = report_model.id
+        report._set_id(model.id)
 
     def remove(self, report: Report) -> None:
-        report_model = self.session.get(ReportModel, report.id)
-        if report_model:
-            self.session.delete(report_model)
+        model = self.session.get(ReportModel, report.id)
+        if model:
+            self.session.delete(model)
             self.session.commit()
 
-    def get_by_id(self, report_id: int) -> Report | None:
-        report_model = self.session.get(ReportModel, report_id)
+    def get_by_id(self, report_id: int) -> Report:
+        model = self.session.get(ReportModel, report_id)
 
-        if not report_model:
-            return None
+        if not model:
+            raise IdNotFound(f'Report id {report_id} not found.')
 
-        report = Report(
-            report_model.creator_id,
-            report_model.name,
-            report_model.description,
-            report_model.target_user_id,
-            report_model.target_task_id,
-            report_model.created_at
-        )
-        report.id = report_model.id
+        report = ReportMapper.to_entity(model)
         return report

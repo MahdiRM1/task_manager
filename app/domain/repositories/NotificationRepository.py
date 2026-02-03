@@ -18,5 +18,5 @@ class NotificationRepository(ABC):
         pass
 
     @abstractmethod
-    def get_by_id(self, notification_id : int) -> Notification | None:
+    def get_by_id(self, notification_id : int) -> Notification:
         pass

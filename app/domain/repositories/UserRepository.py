@@ -17,7 +17,7 @@ class UserRepository(ABC):
         pass
 
     @abstractmethod
-    def get_by_id(self, user_id: int) -> User | None:
+    def get_by_id(self, user_id: int) -> User:
         pass
 
     @abstractmethod
