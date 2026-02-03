@@ -1,5 +1,4 @@
-from sqlalchemy import create_engine
 from app.adapters.models.base import Base
+from app.adapters.engine import engine
 
-engine = create_engine('sqlite:///mydatabase.db', echo=True)
-Base.metadata.create_all(engine)
+Base.metadata.create_all(bind=engine)
