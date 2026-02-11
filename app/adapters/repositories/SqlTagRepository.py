@@ -14,14 +14,12 @@ class SqlTagRepository(TagRepository):
             model = TagModel(name=tag.name)
             self.session.add(model)
             self.session.flush()
-            self.session.commit()
             tag._set_id(model.id)
 
     def remove(self, tag: Tag) -> None:
         model = self.session.get(TagModel, tag.id)
         if model:
             self.session.delete(model)
-            self.session.commit()
 
     def get_by_name(self, tag_name:str) -> Tag:
         model = self.session.query(TagModel).filter_by(name=tag_name).first()

@@ -15,14 +15,12 @@ class SqlReportRepository(ReportRepository):
         model = ReportMapper.to_model(report)
         self.session.add(model)
         self.session.flush()
-        self.session.commit()
         report._set_id(model.id)
 
     def remove(self, report: Report) -> None:
         model = self.session.get(ReportModel, report.id)
         if model:
             self.session.delete(model)
-            self.session.commit()
 
     def get_by_id(self, report_id: int) -> Report:
         model = self.session.get(ReportModel, report_id)

@@ -1,4 +1,3 @@
-from app.adapters.Exceptions import IdAlreadySet
 from app.core.value_objects.TaskStatus import TaskStatus
 from app.core.Exceptions import *
 
@@ -21,12 +20,12 @@ class Task:
         if actor_id != self.creator_id:
             raise PermissionDenied()
         if assignee.id == self.assignee_id:
-            raise TaskAlreadyAssigned(self.id, assignee.id)
+            raise TaskAlreadyAssigned(self._id, assignee.id)
         self.assignee_id = assignee.id
 
     def move_to_board(self, actor_id, new_board):
         if self.board_id == new_board.id:
-            raise TaskAlreadyOnBoard(self.id, self.board_id)
+            raise TaskAlreadyOnBoard(self._id, self.board_id)
         if self.creator_id == actor_id:
             raise PermissionDenied()
 
@@ -64,7 +63,7 @@ class Task:
 
     def _set_id(self, id):
         if not self._id:
-            raise IdAlreadySet(f'Tsk id "{self.name}" is already set.')
+            raise IdAlreadySet(self._id)
         self._id = id
 
     def get_id(self):

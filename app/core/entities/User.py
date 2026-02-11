@@ -1,4 +1,4 @@
-from app.adapters.Exceptions import IdAlreadySet
+from app.core.Exceptions import IdAlreadySet
 
 
 class User:

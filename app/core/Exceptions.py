@@ -22,3 +22,7 @@ class TaskAlreadyAssigned(Exception):
 class TaskAlreadyOnBoard(Exception):
     def __init__(self, task_id, board_id):
         super().__init__(f'Task id "{task_id}" is already on board {board_id}.')
+
+class IdAlreadySet(Exception):
+    def __init__(self, id):
+        super().__init__(f'Id "{id}" is already set.')

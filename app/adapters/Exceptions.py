@@ -3,6 +3,3 @@ class IdNotFound(Exception):
 
 class NameNotFound(Exception):
     pass
-
-class IdAlreadySet(Exception):
-    pass

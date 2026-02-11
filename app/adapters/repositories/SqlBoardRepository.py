@@ -13,14 +13,12 @@ class SqlBoardRepository(BoardRepository):
         model = BoardModel(name = board.name)
         self.session.add(model)
         self.session.flush()
-        self.session.commit()
         board._set_id(model.id)
 
     def remove(self, board:Board) -> None:
         model = self.session.get(BoardModel, board.get_id())
         if model:
             self.session.delete(model)
-            self.session.commit()
 
     def get_by_id(self, board_id:int) -> Board:
         model = self.session.get(BoardModel, board_id)

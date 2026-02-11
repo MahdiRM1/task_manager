@@ -3,7 +3,7 @@ from datetime import datetime
 from app.core.entities.Notification import Notification
 
 
-class NotificationService:
+class NotificationApplicationService:
     def __init__(self, notification_repo):
         self.notification_repo = notification_repo
 

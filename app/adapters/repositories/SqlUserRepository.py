@@ -14,20 +14,17 @@ class SqlUserRepository(UserRepository):
         model = UserModel(name = user.name)
         self.session.add(model)
         self.session.flush()
-        self.session.commit()
         user._set_id(model.id)
 
     def remove(self, user: User) -> None:
         model = self.session.get(UserModel, user.get_id())
         if model:
             self.session.delete(model)
-            self.session.commit()
 
     def update(self, user: User) -> None:
         user_model = self.session.get(UserModel, user.get_id())
         if user_model:
             user_model.name = user.name
-            self.session.commit()
 
     def get_by_id(self, user_id: int) -> User:
         model = self.session.get(UserModel, user_id)
@@ -41,4 +38,4 @@ class SqlUserRepository(UserRepository):
 
     def has_tasks(self, user_id: int) -> bool:
         model = self.session.get(UserModel, user_id)
-        return model and model.tasks
+        return bool(model and model.tasks)
