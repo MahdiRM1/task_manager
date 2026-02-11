@@ -1,4 +1,4 @@
-from app.core.Exceptions import PermissionDenied, IdAlreadySet
+from app.core.Exceptions import IdAlreadySet
 
 
 class Notification:
@@ -9,9 +9,7 @@ class Notification:
         self.created_at = creation_time
         self.is_read = is_read
 
-    def mark_as_read(self, actor_id):
-        if actor_id != self.receiver_id:
-            raise PermissionDenied()
+    def mark_as_read(self):
         self.is_read = True
 
     def _set_id(self, id):
